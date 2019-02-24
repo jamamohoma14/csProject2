@@ -101,7 +101,7 @@ public class HMLLMTest {
 			else 
 				assertEquals(data[i+1], testMap.get(data[i]));
 		for (int i = 0; i < otherData.length; i++)
-			assertEquals(null, testMap.get(otherData[i]));
+            assertEquals(null, testMap.get(otherData[i]));
 	}
 
 	@Test
