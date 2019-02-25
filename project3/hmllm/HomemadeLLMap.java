@@ -15,9 +15,17 @@ import java.util.Iterator;
 
 public class HomemadeLLMap implements HomemadeMap {
 
+	/* Node to represent beginning of list */
 	public Node first;
+	/* Node to hold temporary node for methods */
 	public Node tmp;
-	public int listLen = 0;
+	/* Node to represent end of list */
+	public Node last;
+	/* int holds length of list */
+	public int len = 0;
+	
+	public int testi = 0;
+	
     /**
      * Test whether an association exists for this key.
      * @param key The key to remove
@@ -35,7 +43,7 @@ public class HomemadeLLMap implements HomemadeMap {
     public Node getNode(String key) {
     	tmp = first;
     	int i;
-    	for (i=0;i<listLen;i++) {
+    	for (i=0;i<len;i++) {
     		if (tmp.key == key) {
     			return tmp;
     		}
@@ -44,31 +52,31 @@ public class HomemadeLLMap implements HomemadeMap {
     	return null;
     }
    
-
     /**
      * Add an association to the map.
      * @param key The key to this association
      * @param val The value to which this key is associated
      */
     public void put(String key, String val) {
-    	if (key == null) {
-    		return;
-    	}
-    	if (first == null) {
-    		first = new Node(key, val);
-    		listLen++;
-    		return;
-    	} else {
-    		tmp = getNode(key);
-    		if (tmp == null) {
-    			tmp = new Node(key, val);
-    			first.last().setNext(tmp);
-    			tmp.setPrev(first.last().getPrev());
+    	tmp = getNode(key);
+    	if (tmp == null) {
+    		if (first == null) {
+    			first = new Node(key, val);
+    		} else if (last == null) {
+    			last = new Node(key, val);
+    			first.setNext(last);
+    			last.setPrev(first);
     		} else {
-    			tmp.setVal(val);
+    			tmp = new Node(key, val);
+    			last.setNext(tmp);
+    			tmp.setPrev(last);
+    			last = tmp;
     		}
+    		len++;
+    	} else {
+    		tmp.setVal(val);
     	}
-    	listLen++;
+    	return;
     }  
 
     /**
@@ -77,14 +85,9 @@ public class HomemadeLLMap implements HomemadeMap {
      * @return The value associated with this key, null if none exists
      */
     public String get(String key) {
-//    	tmp = getNode(key);
-//    	if (tmp == null) {
-//    		return null;
-//    	} else {
-//    		return tmp.getVal();
-//    	}
-    	if (containsKey(key)) {
-    		return getNode(key).getVal();
+    	tmp = getNode(key);
+    	if (tmp != null) { 
+    		return tmp.getVal();
     	}
     	return null;
     }
@@ -94,15 +97,39 @@ public class HomemadeLLMap implements HomemadeMap {
      * @return An iterator over the set of keys.
      */
     public Iterator<String> keyIterator() {
-    	return null;
+    	return new MapIter(first);
     }
 
-    
     /**
      * Remove the association for this key.
      * @param key The key to remove
      */   
     public void remove(String key) {
+    	tmp = getNode(key);
+    	if (tmp == null) {
+    		return;
+    	} else {
+    		if (first.getKey() == key) {
+    			first = first.getNext();
+    			if (first == null) {
+    				len--;
+    				return;
+    			}
+    			first.setPrev(null);
+    		} else if (last.getKey() == key) {
+    			last = last.getPrev();
+    			last.setNext(null);
+    			if (last.getKey() == first.getKey()) {
+    				last = null;
+    			}
+    		} else {
+    			Node tmp1 = tmp.getNext();
+    			Node tmp2 = tmp.getPrev();
+    			tmp1.setPrev(tmp2);
+    			tmp2.setNext(tmp1);
+    		}
+    	len--;
+    	}
     }
 
 
