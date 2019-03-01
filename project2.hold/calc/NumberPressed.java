@@ -17,7 +17,6 @@ public class NumberPressed implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		 state.newNumber(number);
 		 state.setDisplay();
-		 //may have to change
 		 state.lastButton = 'N';
 	}
 

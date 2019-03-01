@@ -4,10 +4,10 @@ public class CalcState {
 	
 	public CalculatorFace face;
 	public String display = "";
-	public String aNum = "";
-	public String bNum = "";
-	public String lastTerm = "";
-	public char op = '0';
+	public String currString = "";
+	public float currTerm = 0;
+	public float lastTerm = 0;
+	public char lastOp = '-';
 	public int toCalculate;
 	public boolean equate = false;
 	public float answer;
@@ -20,102 +20,67 @@ public class CalcState {
 		face = f;
 	}
 	
-	public void decimal() {	
-	
-		if (decimal == false) {
-			if (equate == true) {
-				bNum += ".";
-			} else {
-				aNum += ".";
-			}
-		}
-		decimal = true;
-	
-	}
-	
-	public void plusOrMinus() {
-		
-		plusOrMinus *= -1;
-		setDisplay();
-	
-	}
-	
 	public void operate() {
 		
-		aNum = String.valueOf(Float.valueOf(aNum) * plusOrMinus);
-		plusOrMinus = 1;
-		decimal = false;
-		if (equate == false) {
-			equate = true;
-		} else if (op == '+') {
-			add();
-		} else if (op == '-') {
-			subtract();
-		} else if (op == '*') {
-			multiply();
-		} else if (op == '/') {
-			divide();
+		if (currString != "") {
+			lastTerm = Float.valueOf(currString) * plusOrMinus;
+			plusOrMinus = 1;
+			decimal = false;
+			if (equate == false) {
+				equate = true;
+			} else if (lastOp == '+') {
+				add();
+			} else if (lastOp == '-') {
+				subtract();
+			} else if (lastOp == '*') {
+				multiply();
+			} else if (lastOp == '/') {
+				divide();
+			}
+
 		}
 		
 	}
 	
 	public void add() {
-		System.out.print("aNum: " + aNum + " bNum: " + bNum + " lastTerm: " + lastTerm + "\n");
-		if (bNum == "") {
-			answer = Float.valueOf(aNum) + Float.valueOf(lastTerm);
-		} else {
-			answer = Float.valueOf(aNum) + Float.valueOf(bNum);
-			lastTerm = bNum;	
-		}
+		
+		lastTerm = lastTerm + Float.valueOf(currString);
+		currString = "";	
 		equate();
 		
 	}
 	
 	public void subtract() {
 		
-		if (bNum == "") {
-			answer = Float.valueOf(aNum) - Float.valueOf(lastTerm);
-		} else {
-			answer = Float.valueOf(aNum) - Float.valueOf(bNum);
-			lastTerm = bNum;	
-		}
+		lastTerm = lastTerm - Float.valueOf(currString);
+		currString = "";	
 		equate();
 		
 	}
 	
 	public void multiply() {
 
-		if (bNum == "") {
-			answer = Float.valueOf(aNum) * Float.valueOf(lastTerm);
-		} else {
-			answer = Float.valueOf(aNum) * Float.valueOf(bNum);
-			lastTerm = bNum;	
-		}
+		lastTerm = lastTerm * Float.valueOf(currString);
+		currString = "";	
 		equate();
 		
 	}
 	
 	public void divide() {
 
-		if (bNum == "") {
-			answer = Float.valueOf(aNum) / Float.valueOf(lastTerm);
-		} else {
-			answer = Float.valueOf(aNum) / Float.valueOf(bNum);
-			lastTerm = bNum;
-		}
+		lastTerm = lastTerm / Float.valueOf(currString);
+		currString = "";	
 		equate();
 		
 	}
 	
 	public void equate() {
 		
-		aNum = String.valueOf(plusOrMinus * answer);
-		bNum = "";
-		display = aNum;
+		currString = "";
+		display = String.valueOf(lastTerm);
 		setDisplay();
 		
 	}
-	
 	
 	public void setDisplay() {
 		
@@ -134,27 +99,34 @@ public class CalcState {
 		if (lastButton == '=') {
 			clear();
 		}
-		if (equate == false) {
-			aNum += String.valueOf(i);
-			display = aNum;
-		} else {
-			bNum += String.valueOf(i);
-			display = bNum;
+		
+		currString += String.valueOf(i);
+		display = currString;
+	}
+	
+	public void decimal() {	
+	
+		if (decimal == false) {
+			currString += ".";
 		}
+		decimal = true;
+	
+	}
+	
+	public void plusOrMinus() {
 		
-		System.out.print("aNum: " + aNum + '\n');
-		System.out.print("bNum: " + bNum + '\n');
-		System.out.print("display: " + display + '\n');
-		
+		plusOrMinus *= -1;
+		setDisplay();
+	
 	}
 	
 	public void clear() {
 		
-		System.out.print("Clearing...\n");
 		display = "";
-		aNum = "";
-		bNum = "";
-		op = '0';
+		currString = "";
+		currTerm = 0;
+		lastTerm = 0;
+		lastOp = '-';
 		equate = false;
 		face.writeToScreen("");
 		
