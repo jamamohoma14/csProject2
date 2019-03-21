@@ -16,7 +16,7 @@ public class OperatorPressed implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (op != '=') {
-			state.lastOp = op;	
+			state.lastOp = op;
 		}
 		state.lastButton = op;
 		state.operate();

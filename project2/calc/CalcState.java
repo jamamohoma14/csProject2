@@ -96,7 +96,7 @@ public class CalcState {
 	
 	public void newNumber(int i) {
 		
-		if (lastButton == '=') {
+		if (lastButton != 'N') {
 			clear();
 		}
 		
