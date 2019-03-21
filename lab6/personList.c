@@ -12,8 +12,10 @@
 struct personList *
 makeList()
 {
-	// Write this in part C
-	return NULL;
+	struct personList * plist = malloc(sizeof(struct personList));
+	plist->head = NULL;
+	plist->size = 0;
+	return plist;
 }
 
 void
@@ -23,8 +25,11 @@ add(struct personList *list, struct person *item)
 	for (current = list->head; current != NULL; current = current->next)
 		if (current->datum == item)
 			return;
-
-	// Finish this in part D
+	newNode = malloc(sizeof(struct personNode *));
+	newNode->datum = item;
+	newNode->next = list->head;
+	list->head = newNode;
+	list->size = list->size + 1;
 
 }
 
@@ -131,9 +136,15 @@ getRandom(struct personList *list)
 struct person **
 toArray(struct personList *list)
 {
-	// Do this in part E
-
-	return NULL;
+  
+	struct person ** ptr = malloc(sizeof(struct person *) * list->size);
+	struct personNode * temp;// = list->head;
+	int i = 0;
+	for (temp = list->head; temp != NULL; temp = temp->next) {
+		ptr[i] = temp->datum;
+		i++;
+	}
+  	return ptr;
 
 }
 

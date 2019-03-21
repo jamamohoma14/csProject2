@@ -10,8 +10,15 @@
 struct person *
 makePerson(int givenName, char *surname, int gender, int birthYear) 
 {
-	// Write this in part A
-	return NULL;
+	struct person * a = malloc(sizeof(struct person));
+	a->givenName = givenName;
+	a->surname = surname;
+	a->gender = gender;
+	a->birthYear = birthYear;
+	a->spouse= NULL;
+	a->children = makeList();
+	
+	return a;
 }
 
 void
@@ -23,7 +30,13 @@ addChild(struct person *parent, struct person *child)
 void
 destroyPerson(struct person *p)
 {
-	// Write this in part B.
+  	p->givenName = 0;
+	p->surname = NULL;
+	p->gender = 0;
+	p->birthYear = 0;
+	p->spouse = NULL;
+	destroyList(p->children);
+	free(p);
 }
 
 char *
