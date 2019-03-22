@@ -39,7 +39,7 @@ removePerson(struct personList *list, struct person *item)
 	if (list->head == NULL)
 		return;
 
-	struct personNode *old;
+	struct personNode *old = NULL;
 	if (list->head->datum == item)
 	{
 		old = list->head;

@@ -256,6 +256,20 @@ int main(int argc, char **argv)
 
 char *chooseChildName(struct person *father, struct person *mother, int gender)
 {
-	// Adjust this in part 4
-	return father->surname; 
+    switch(namingPolicy) {
+        case 0:
+            return father->surname;
+        case 1:
+            switch(gender) {
+                case 0: return father->surname;
+                case 1: return mother->surname;
+            }
+        case 2:
+            switch(gender) {
+                case 0: return mother->surname;
+                case 1: return father->surname;
+            }
+
+    }
+	return "Ben was a bad team member"; 
 }
